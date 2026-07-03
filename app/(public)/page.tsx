@@ -1,65 +1,92 @@
-import Image from "next/image";
+// app/(public)/page.tsx
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <section className="relative overflow-hidden bg-[#16233F] text-[#FAF6EE]">
+        <svg
+          className="absolute right-[-80px] top-[-80px] opacity-10 pointer-events-none"
+          width="500" height="500" viewBox="0 0 500 500" fill="none"
+        >
+          {[60, 110, 160, 210, 260].map((r) => (
+            <circle key={r} cx="250" cy="250" r={r} stroke="#C9A227" strokeWidth="1.5" />
+          ))}
+        </svg>
+        <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36">
+          <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-4">
+            Est. 2001 &middot; Playgroup to Class 8
+          </div>
+          <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-6xl font-semibold leading-tight max-w-2xl">
+            Where the Dreams are Nurtured
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-6 text-[#C9C4B8] max-w-lg text-lg">
+            Cape Comorin School has spent 25+ years building a place where
+            children are known by name, and education means real, honest
+            effort — not certificates on a wall.
           </p>
+          <div className="mt-8 flex gap-4">
+            <Link href="/admissions" className="bg-[#8B2E3F] hover:bg-[#732634] transition-colors px-6 py-3 rounded font-medium">
+              Admissions Open
+            </Link>
+            <Link href="/about" className="border border-[#C9A227] text-[#C9A227] hover:bg-[#C9A227] hover:text-[#16233F] transition-colors px-6 py-3 rounded font-medium">
+              Our Story
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-6 text-center">
+        {[
+          ["25+", "Years of Legacy"],
+          ["Playgroup–8", "Classes Offered"],
+          ["English", "Medium"],
+          ["Govt.", "Recognized"],
+        ].map(([big, small]) => (
+          <div key={small} className="border-t-2 border-[#C9A227] pt-4">
+            <div className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[#16233F]">
+              {big}
+            </div>
+            <div className="text-sm text-[#5B5F66] mt-1">{small}</div>
+          </div>
+        ))}
+      </section>
+
+      <section className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-3">
+            From the Principal's Desk
+          </div>
+          <p className="font-[family-name:var(--font-display)] text-2xl leading-relaxed text-[#16233F]">
+            "Every child who walks through our gates carries a dream. Our
+            work, every single day, is to make sure that dream is taken
+            seriously."
+          </p>
+          <div className="mt-4 text-sm text-[#5B5F66]">
+            — Chitranshi Shukla, Principal
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[#16233F]">
+            Notice Board
+          </h2>
+          <Link href="/notices" className="text-sm text-[#8B2E3F] hover:underline">
+            View all →
+          </Link>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="border border-[#E5DFD0] bg-white rounded p-5">
+              <div className="text-xs text-[#C9A227] uppercase tracking-wide mb-2">Notice</div>
+              <div className="font-medium text-[#16233F]">Admissions Open 2026–27</div>
+              <div className="text-sm text-[#5B5F66] mt-1">Click to view full notice PDF.</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
