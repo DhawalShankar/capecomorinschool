@@ -2,7 +2,33 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Home() {
+type Notice = {
+  id: number;
+  title: string;
+  file_url: string;
+  uploaded_at: string;
+};
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+async function getNotices(): Promise<Notice[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/notices`, {
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export default async function Home() {
+  const notices = await getNotices();
+  const latestNotices = notices.slice(0, 3);
+
   return (
     <>
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
@@ -87,15 +113,28 @@ export default function Home() {
             View all →
           </Link>
         </div>
-        <div className="grid md:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="border border-[#E5DFD0] bg-white rounded p-5">
-              <div className="text-xs text-[#C9A227] uppercase tracking-wide mb-2">Notice</div>
-              <div className="font-medium text-[#16233F]">Admissions Open 2026–27</div>
-              <div className="text-sm text-[#5B5F66] mt-1">Click to view full notice PDF.</div>
-            </div>
-          ))}
-        </div>
+
+        {latestNotices.length === 0 ? (
+          <p className="text-sm text-[#8A8F97]">No notices published yet.</p>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-4">
+            {latestNotices.map((n) => (
+              <a
+                key={n.id}
+                href={n.file_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block border border-[#E5DFD0] bg-white rounded p-5 hover:border-[#C9A227] transition-colors"
+              >
+                <div className="text-xs text-[#C9A227] uppercase tracking-wide mb-2">Notice</div>
+                <div className="font-medium text-[#16233F]">{n.title}</div>
+                <div className="text-sm text-[#5B5F66] mt-1">
+                  {formatDate(n.uploaded_at)} &middot; View PDF →
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );
