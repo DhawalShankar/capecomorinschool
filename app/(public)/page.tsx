@@ -1,19 +1,29 @@
 // app/(public)/page.tsx
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <>
-      <section className="relative overflow-hidden bg-[#16233F] text-[#FAF6EE]">
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        <Image
+          src="/hero-school.jpg"
+          alt="Cape Comorin School campus"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-[#16233F]/70" />
         <svg
-          className="absolute right-[-80px] top-[-80px] opacity-10 pointer-events-none"
+          className="absolute right-[-80px] top-[-80px] opacity-15 pointer-events-none"
           width="500" height="500" viewBox="0 0 500 500" fill="none"
         >
           {[60, 110, 160, 210, 260].map((r) => (
             <circle key={r} cx="250" cy="250" r={r} stroke="#C9A227" strokeWidth="1.5" />
           ))}
         </svg>
-        <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36">
+
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-28 md:py-36 text-[#FAF6EE]">
           <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-4">
             Est. 2001 &middot; Playgroup to Class 8
           </div>

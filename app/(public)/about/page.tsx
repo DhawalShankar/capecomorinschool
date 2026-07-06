@@ -6,7 +6,6 @@ export default function About() {
       <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold text-[#16233F] mb-8">
         Our Story
       </h1>
-
       <p className="text-[#3A3E45] leading-relaxed mb-6">
         Cape Comorin School was founded in 2001 with a simple belief: that
         every child deserves an education built on real effort, not
@@ -20,7 +19,6 @@ export default function About() {
         trophy walls — we focus on the quieter, harder work of actually
         teaching well.
       </p>
-
       <div className="grid md:grid-cols-2 gap-8 mt-12">
         <div className="border-t-2 border-[#C9A227] pt-4">
           <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[#16233F] mb-2">
@@ -42,14 +40,17 @@ export default function About() {
           </p>
         </div>
       </div>
-
       <div className="mt-16 bg-white border border-[#E5DFD0] rounded p-8">
         <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-3">
           Principal's Message
         </div>
         <p className="font-[family-name:var(--font-display)] text-xl leading-relaxed text-[#16233F] mb-3">
-          "Every child who walks through our gates carries a dream. Our work
-          is to make sure that dream is taken seriously — every single day."
+          "In 25 years, I have learned that no two children grow the same
+          way, on the same day, at the same pace — and a school that
+          forgets this stops being a school and becomes a factory. Our
+          promise here has never been to produce the loudest results. It
+          has been to notice each child closely enough to know what they
+          actually need, and to give it to them without hurry."
         </p>
         <div className="text-sm text-[#5B5F66]">— Chitranshi Shukla, Principal</div>
       </div>

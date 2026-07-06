@@ -1,14 +1,32 @@
 // app/(public)/admissions/page.tsx
 "use client";
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function Admissions() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO: wire to Flask backend enquiry endpoint
-    setSubmitted(true);
+    setSending(true);
+    setError(false);
+
+    try {
+      await emailjs.sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_ADMISSIONS_TEMPLATE_ID!,
+        e.currentTarget,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      );
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -30,13 +48,22 @@ export default function Admissions() {
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input required placeholder="Parent / Guardian Name" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
-            <input required placeholder="Child's Name" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
-            <input required placeholder="Phone Number" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
-            <input placeholder="Class Applying For" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
-            <button type="submit" className="bg-[#8B2E3F] hover:bg-[#732634] transition-colors text-white px-6 py-2.5 rounded font-medium text-sm">
-              Submit Enquiry
+            <input name="from_name" required placeholder="Parent / Guardian Name" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
+            <input name="child_name" required placeholder="Child's Name" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
+            <input name="from_phone" required placeholder="Phone Number" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
+            <input name="class_applying" placeholder="Class Applying For" className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm" />
+            <button
+              type="submit"
+              disabled={sending}
+              className="bg-[#8B2E3F] hover:bg-[#732634] disabled:opacity-60 transition-colors text-white px-6 py-2.5 rounded font-medium text-sm"
+            >
+              {sending ? "Sending..." : "Submit Enquiry"}
             </button>
+            {error && (
+              <p className="text-sm text-red-600">
+                Something went wrong — please try again or call us directly.
+              </p>
+            )}
           </form>
         )}
       </div>
