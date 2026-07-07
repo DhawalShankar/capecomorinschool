@@ -1,4 +1,6 @@
 // app/(public)/about/page.tsx
+import Image from "next/image";
+
 export default function About() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-20">
@@ -40,19 +42,36 @@ export default function About() {
           </p>
         </div>
       </div>
+
       <div className="mt-16 bg-white border border-[#E5DFD0] rounded p-8">
         <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-3">
           Principal's Message
         </div>
-        <p className="font-[family-name:var(--font-display)] text-xl leading-relaxed text-[#16233F] mb-3">
-          "In 25 years, I have learned that no two children grow the same
-          way, on the same day, at the same pace — and a school that
-          forgets this stops being a school and becomes a factory. Our
-          promise here has never been to produce the loudest results. It
-          has been to notice each child closely enough to know what they
-          actually need, and to give it to them without hurry."
-        </p>
-        <div className="text-sm text-[#5B5F66]">— Chitranshi Shukla, Principal</div>
+        <div className="flex flex-col sm:flex-row gap-6 items-start">
+          <div className="shrink-0 mx-auto sm:mx-0">
+            <div className="w-70 h-70 rounded-full overflow-hidden border-4 border-[#C9A227] shadow-sm">
+              <Image
+                src="/principal.png"
+                alt="Chitranshi Shukla, Principal of Cape Comorin School"
+                width={112}
+                height={112}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+          </div>
+          <div>
+            <p className="font-[family-name:var(--font-display)] text-xl leading-relaxed text-[#16233F] mb-3">
+              "In 25 years, I have learned that no two children grow the same
+              way, on the same day, at the same pace — and a school that
+              forgets this stops being a school and becomes a factory. Our
+              promise here has never been to produce the loudest results. It
+              has been to notice each child closely enough to know what they
+              actually need, and to give it to them without hurry."
+            </p>
+            <div className="text-sm text-[#5B5F66]">— Chitranshi Shukla, Principal</div>
+          </div>
+        </div>
       </div>
     </div>
   );
