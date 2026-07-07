@@ -1,5 +1,11 @@
 // app/(public)/about/page.tsx
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "About Us | Cape Comorin School, Kanpur",
+  description: "Cape Comorin School, established 2001 in Ratan Lal Nagar, Kanpur — an English-medium, government-recognized school for Playgroup to Class 8.",
+};
 
 export default function About() {
   return (

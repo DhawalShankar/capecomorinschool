@@ -1,3 +1,5 @@
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
+
 // app/(public)/calendar/page.tsx
 type CalendarEvent = {
   id: number;
@@ -34,6 +36,11 @@ async function getEvents(): Promise<CalendarEvent[]> {
       new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
   );
 }
+
+export const metadata: Metadata = {
+  title: "Academic Calendar",
+  description: "Academic calendar for Cape Comorin School, Kanpur — term dates, holidays, exams, and PTMs at a glance.",
+};
 
 export default async function AcademicCalendar() {
   const events = await getEvents();

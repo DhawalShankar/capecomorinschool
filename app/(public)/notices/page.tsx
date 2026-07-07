@@ -1,3 +1,5 @@
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
+
 // app/(public)/notices/page.tsx
 type Notice = {
   id: number;
@@ -21,6 +23,12 @@ async function getNotices(): Promise<Notice[]> {
   if (!res.ok) return [];
   return res.json();
 }
+
+
+export const metadata: Metadata = {
+  title: "Notice Board",
+  description: "Latest notices and announcements from Cape Comorin School, Kanpur.",
+};
 
 export default async function Notices() {
   const notices = await getNotices();

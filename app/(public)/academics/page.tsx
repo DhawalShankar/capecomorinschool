@@ -1,4 +1,5 @@
 // app/(public)/academics/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 
 // ---------- Custom icon badges (echo the crest's circular medallion + gold ring) ----------
@@ -74,7 +75,10 @@ const icons = {
     </svg>
   ),
 };
-
+export const metadata: Metadata = {
+  title: "Academics | Cape Comorin School, Kanpur",
+  description: "CBSE-pattern teaching built on NCERT foundations, from Playgroup to Class 8. Real understanding over rote memorization.",
+};
 export default function Academics() {
   const points = [
     { icon: "path", title: "Playgroup to Class 8", desc: "A complete early-to-middle school journey under one roof." },

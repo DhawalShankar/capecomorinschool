@@ -1,6 +1,7 @@
 // app/(public)/page.tsx
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 type Notice = {
   id: number;
@@ -24,6 +25,11 @@ async function getNotices(): Promise<Notice[]> {
   if (!res.ok) return [];
   return res.json();
 }
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Cape Comorin School, Kanpur — English-medium, government-recognized school for Playgroup to Class 8. Admissions open for 2026–27.",
+};
 
 export default async function Home() {
   const notices = await getNotices();

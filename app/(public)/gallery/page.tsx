@@ -1,6 +1,7 @@
 // app/(public)/gallery/page.tsx
 import type { ReactNode } from "react";
 import Script from "next/script";
+import type { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 // ---------- Icon badge system (consistent with Academics/Admissions pages) ----------
 function IconBadge({ children }: { children: ReactNode }) {
@@ -56,6 +57,11 @@ const icons = {
     </svg>
   ),
 } as const;
+
+export const metadata: Metadata = {
+  title: "Gallery | Cape Comorin School, Kanpur",
+  description: "A look at life at Cape Comorin School — classrooms, facilities, and everyday moments from Playgroup to Class 8.",
+};
 
 export default function Gallery() {
   const facilities = [
