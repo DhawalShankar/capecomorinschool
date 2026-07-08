@@ -24,7 +24,7 @@ export default function AdminLogin() {
     //   setError("Invalid email or password");
     // }
 
-    router.push("/admin/dashboard");
+    router.push("/dashboard");
   }
 
   return (

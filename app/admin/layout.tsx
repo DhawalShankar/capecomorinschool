@@ -8,10 +8,9 @@ import AdminFooter from "@/components/admin/AdminFooter";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === "/admin/login";
+  const isLoginPage = pathname === "/login" || pathname === "/admin/login";
 
   if (isLoginPage) {
-    // Login page renders standalone — no sidebar/topbar/footer
     return <>{children}</>;
   }
 

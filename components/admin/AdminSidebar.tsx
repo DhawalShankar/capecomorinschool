@@ -5,14 +5,15 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+// components/admin/AdminSidebar.tsx — only the `nav` array changes
 const nav = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: "dashboard" },
-  { href: "/admin/teachers", label: "Teachers", icon: "teacher" },
-  { href: "/admin/students", label: "Students", icon: "student" },
-  { href: "/admin/registers", label: "Registers", icon: "register" },
-  { href: "/admin/notices", label: "Notices", icon: "notice" },
-  { href: "/admin/calendar", label: "Calendar", icon: "calendar" },
-  { href: "/admin/fees", label: "Fees", icon: "fees" },
+  { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
+  { href: "/teachers", label: "Teachers", icon: "teacher" },
+  { href: "/students", label: "Students", icon: "student" },
+  { href: "/registers", label: "Registers", icon: "register" },
+  { href: "/notices", label: "Notices", icon: "notice" },
+  { href: "/calendar", label: "Calendar", icon: "calendar" },
+  { href: "/fees", label: "Fees", icon: "fees" },
 ] as const;
 
 const icons: Record<string, ReactNode> = {

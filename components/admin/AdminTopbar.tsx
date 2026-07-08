@@ -13,7 +13,7 @@ export default function AdminTopbar() {
     setSigningOut(true);
     try {
       await signOut(auth);
-      router.push("/admin/login");
+      router.push("/login");
     } finally {
       setSigningOut(false);
     }
