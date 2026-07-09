@@ -66,7 +66,17 @@ export default function AdminStudents() {
   const [dedupeLoading, setDedupeLoading] = useState(false);
   const [dedupeError, setDedupeError] = useState<string | null>(null);
 
+  const [role, setRole] = useState<string | null>(null);
+  const isSuperAdmin = role === "super_admin";
+
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  useEffect(() => {
+    authedFetch(`${API}/api/auth/me`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setRole(data?.role ?? null))
+      .catch(() => setRole(null));
+  }, []);
 
   async function loadAllStudents() {
     setLoading(true);
@@ -265,41 +275,43 @@ export default function AdminStudents() {
         </button>
       </form>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-xs text-[#5B5F66]">
-            <input
-              type="checkbox"
-              checked={results.length > 0 && selected.size === results.length}
-              onChange={toggleSelectAll}
-            />
-            Select all
-          </label>
-          {selected.size > 0 && (
-            <button
-              onClick={handleDeleteSelected}
-              disabled={deleting}
-              className="text-xs font-medium text-white bg-[#8B2E3F] hover:bg-[#732634] disabled:opacity-60 transition-colors rounded px-4 py-1.5"
-            >
-              {deleting ? "Deleting..." : `Delete Selected (${selected.size})`}
-            </button>
-          )}
-        </div>
+      {isSuperAdmin && (
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 text-xs text-[#5B5F66]">
+              <input
+                type="checkbox"
+                checked={results.length > 0 && selected.size === results.length}
+                onChange={toggleSelectAll}
+              />
+              Select all
+            </label>
+            {selected.size > 0 && (
+              <button
+                onClick={handleDeleteSelected}
+                disabled={deleting}
+                className="text-xs font-medium text-white bg-[#8B2E3F] hover:bg-[#732634] disabled:opacity-60 transition-colors rounded px-4 py-1.5"
+              >
+                {deleting ? "Deleting..." : `Delete Selected (${selected.size})`}
+              </button>
+            )}
+          </div>
 
-        <button
-          onClick={handleFindDuplicates}
-          disabled={dedupeLoading}
-          className="text-xs font-medium text-[#16233F] border border-[#E5DFD0] hover:bg-[#F0EDE2] disabled:opacity-60 transition-colors rounded px-4 py-1.5"
-        >
-          {dedupeLoading ? "Checking..." : "Find Duplicates"}
-        </button>
-      </div>
+          <button
+            onClick={handleFindDuplicates}
+            disabled={dedupeLoading}
+            className="text-xs font-medium text-[#16233F] border border-[#E5DFD0] hover:bg-[#F0EDE2] disabled:opacity-60 transition-colors rounded px-4 py-1.5"
+          >
+            {dedupeLoading ? "Checking..." : "Find Duplicates"}
+          </button>
+        </div>
+      )}
 
       {deleteError && <p className="text-sm text-red-600 mb-4">{deleteError}</p>}
 
       {dedupeError && <p className="text-sm text-red-600 mb-4">{dedupeError}</p>}
 
-      {dedupePreview && (
+      {isSuperAdmin && dedupePreview && (
         <div className="mb-6 p-4 bg-[#FAF8F2] border border-[#E5DFD0] rounded text-sm">
           {dedupePreview.duplicate_groups_found === 0 ? (
             <p className="text-[#5B5F66]">No duplicate records found (matched by SR number + school).</p>
@@ -346,12 +358,14 @@ export default function AdminStudents() {
             <div key={s.sr_number} className="py-3">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={selected.has(s.id)}
-                    onChange={() => toggleSelected(s.id)}
-                  />
+                  {isSuperAdmin && (
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      checked={selected.has(s.id)}
+                      onChange={() => toggleSelected(s.id)}
+                    />
+                  )}
                   <div>
                     <div className="font-medium text-[#16233F] text-sm">{s.student_name}</div>
                     <div className="text-xs text-[#5B5F66]">
