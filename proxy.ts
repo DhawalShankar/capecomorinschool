@@ -29,9 +29,23 @@ const VALID_ADMIN_PATHS = [
   "/fees",
 ];
 
+// Static/public files that should always bypass the routing logic below,
+// even if the matcher regex doesn't catch them (belt-and-suspenders vs
+// the json-manifest bug).
+const PROXY_BYPASS_PATHS = new Set([
+  "/manifest.webmanifest",
+  "/admin-manifest.json",
+  "/robots.txt",
+  "/sitemap.xml",
+]);
+
 export function proxy(req: NextRequest) {
   const hostname = req.headers.get("host") || "";
   const { pathname } = req.nextUrl;
+
+  if (PROXY_BYPASS_PATHS.has(pathname) || pathname.startsWith("/admin/icons/")) {
+    return NextResponse.next();
+  }
 
   const isAdminHost =
     hostname.startsWith(ADMIN_HOST_PREFIX) ||
@@ -67,6 +81,6 @@ export function proxy(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next|api|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp|ico|css|js|woff|woff2|ttf)$).*)",
+    "/((?!_next|api|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp|ico|css|js|json|webmanifest|woff|woff2|ttf)$).*)",
   ],
 };
