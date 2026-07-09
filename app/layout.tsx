@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import "./globals.css";
+import "@/lib/pwaInstallCapture"; 
 
 export const metadata: Metadata = {
   title: {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/auth";
+import InstallAppButton from "@/components/admin/InstallAppButton";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -75,6 +76,11 @@ export default function AdminLogin() {
             {error && <p className="text-sm text-red-600 text-center">{error}</p>}
           </form>
         </div>
+
+        <div className="mt-4">
+          <InstallAppButton variant="dropdown" />
+        </div>
+
         <p className="text-center text-xs text-[#8A8F97] mt-6">
           Cape Comorin School — Internal use only
         </p>
