@@ -61,7 +61,7 @@ export default function AdminRegisters() {
       </form>
 
       {result && (
-        <div className="mt-6 bg-white border border-[#E5DFD0] rounded p-6 text-sm space-y-1">
+        <div className="mt-6 bg-white text-black border border-[#E5DFD0] rounded p-6 text-sm space-y-1">
           <p><span className="text-[#5B5F66]">Status:</span> {result.status}</p>
           <p><span className="text-[#5B5F66]">Inserted:</span> {result.inserted}</p>
           <p><span className="text-[#5B5F66]">Skipped (duplicates):</span> {result.skipped}</p>
