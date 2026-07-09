@@ -1,6 +1,6 @@
 // app/admin/students/page.tsx
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authedFetch } from "@/lib/api";
 
 type Student = {
@@ -21,9 +21,29 @@ export default function AdminStudents() {
 
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  async function loadAllStudents() {
+    setLoading(true);
+    const res = await authedFetch(`${API}/api/students/list`);
+    const data = await res.json();
+    setResults(data.results || []);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    loadAllStudents();
+  }, []);
+
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
+
+    // Empty search box — just show everyone again instead of erroring
+    // on Vritukul's min_length=2 requirement.
+    if (query.trim().length === 0) {
+      loadAllStudents();
+      return;
+    }
     if (query.length < 2) return;
+
     setLoading(true);
     const res = await authedFetch(`${API}/api/students/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
@@ -64,7 +84,7 @@ export default function AdminStudents() {
           </div>
         ))}
         {results.length === 0 && !loading && (
-          <p className="text-sm text-[#8A8F97] py-4">No results — try a search above.</p>
+          <p className="text-sm text-[#8A8F97] py-4">No students found.</p>
         )}
       </div>
     </div>
