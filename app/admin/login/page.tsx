@@ -3,28 +3,28 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/auth";
 
 export default function AdminLogin() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-
-    // TODO: Replace with real Firebase auth once backend is ready:
-    // import { signInWithEmailAndPassword } from "firebase/auth";
-    // import { auth } from "@/lib/auth";
-    // try {
-    //   await signInWithEmailAndPassword(auth, email, password);
-    //   router.push("/admin/dashboard");
-    // } catch (err) {
-    //   setError("Invalid email or password");
-    // }
-
-    router.push("/dashboard");
+    setError("");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -35,14 +35,12 @@ export default function AdminLogin() {
             <Image src="/logo.png" alt="Cape Comorin School" width={100} height={100} className="w-full h-full object-contain" priority />
           </div>
         </div>
-
         <div className="text-center mb-8">
           <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-2">Admin Panel</div>
           <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[#16233F]">
             Cape Comorin School
           </h1>
         </div>
-
         <div className="bg-white text-black border border-[#E5DFD0] rounded p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -74,9 +72,9 @@ export default function AdminLogin() {
             >
               {loading ? "Signing in..." : "Login"}
             </button>
+            {error && <p className="text-sm text-red-600 text-center">{error}</p>}
           </form>
         </div>
-
         <p className="text-center text-xs text-[#8A8F97] mt-6">
           Cape Comorin School — Internal use only
         </p>

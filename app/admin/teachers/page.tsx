@@ -1,6 +1,7 @@
 // app/admin/teachers/page.tsx
 "use client";
 import { useEffect, useState } from "react";
+import { authedFetch } from "@/lib/api";
 
 type Teacher = {
   id: number;
@@ -35,7 +36,7 @@ export default function AdminTeachers() {
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    await fetch(`${API}/api/teachers`, {
+    await authedFetch(`${API}/api/teachers`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, subject, grade_level: gradeLevel }),
@@ -48,7 +49,7 @@ export default function AdminTeachers() {
   }
 
   async function togglePublished(t: Teacher) {
-    await fetch(`${API}/api/teachers/${t.id}`, {
+    await authedFetch(`${API}/api/teachers/${t.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ published: !t.published }),
@@ -58,7 +59,7 @@ export default function AdminTeachers() {
 
   async function handleDelete(id: number) {
     if (!confirm("Remove this teacher from the roster?")) return;
-    await fetch(`${API}/api/teachers/${id}`, { method: "DELETE" });
+    await authedFetch(`${API}/api/teachers/${id}`, { method: "DELETE" });
     loadTeachers();
   }
 
