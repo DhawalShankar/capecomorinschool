@@ -1,5 +1,6 @@
 // app/(public)/notices/page.tsx
-import type { Metadata } from "next";
+"use client";
+import { useState, useEffect } from "react";
 
 type Notice = {
   id: number;
@@ -16,22 +17,20 @@ function formatDate(dateStr: string) {
   });
 }
 
-async function getNotices(): Promise<Notice[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/notices`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return [];
-  return res.json();
-}
-
-export const metadata: Metadata = {
-  title: "Notice Board",
-  description: "Latest notices and announcements from Cape Comorin School, Kanpur.",
-};
-
-export default async function Notices() {
-  const notices = await getNotices();
+export default function Notices() {
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeNotice, setActiveNotice] = useState<Notice | null>(null);
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  useEffect(() => {
+    fetch(`${API}/api/notices`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        setNotices(data);
+        setLoading(false);
+      });
+  }, [API]);
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-20">
@@ -39,24 +38,63 @@ export default async function Notices() {
       <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold text-[#16233F] mb-10">
         Notices
       </h1>
-      {notices.length === 0 ? (
+
+      {loading ? (
+        <p className="text-sm text-[#8A8F97]">Loading...</p>
+      ) : notices.length === 0 ? (
         <p className="text-sm text-[#8A8F97]">No notices published yet.</p>
       ) : (
         <div className="space-y-4">
           {notices.map((n) => (
-            <a
+            <button
               key={n.id}
-              href={`${API}/api/notices/${n.id}/download`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block border border-[#E5DFD0] bg-white rounded p-5 hover:border-[#C9A227] transition-colors"
+              onClick={() => setActiveNotice(n)}
+              className="block w-full text-left border border-[#E5DFD0] bg-white rounded p-5 hover:border-[#C9A227] transition-colors"
             >
               <div className="font-medium text-[#16233F]">{n.title}</div>
               <div className="text-sm text-[#5B5F66] mt-1">
-                {formatDate(n.uploaded_at)} &middot; View PDF →
+                {formatDate(n.uploaded_at)} &middot; View notice →
               </div>
-            </a>
+            </button>
           ))}
+        </div>
+      )}
+
+      {activeNotice && (
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          onClick={() => setActiveNotice(null)}
+        >
+          <div
+            className="bg-white rounded-lg w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[#E5DFD0]">
+              <div className="font-medium text-[#16233F] text-sm truncate">{activeNotice.title}</div>
+              <div className="flex items-center gap-4">
+                <a
+                  href={`${API}/api/notices/${activeNotice.id}/download`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#8B2E3F] hover:underline"
+                >
+                  Open in new tab
+                </a>
+                <button
+                  onClick={() => setActiveNotice(null)}
+                  className="text-[#5B5F66] hover:text-[#16233F] text-xl leading-none"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <iframe
+              src={`${API}/api/notices/${activeNotice.id}/download`}
+              className="flex-1 w-full"
+              title={activeNotice.title}
+            />
+          </div>
         </div>
       )}
     </div>
