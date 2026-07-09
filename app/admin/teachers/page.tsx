@@ -74,7 +74,7 @@ export default function AdminTeachers() {
         Faculty page, which never lists names by design.
       </p>
 
-      <form onSubmit={handleAdd} className="bg-white border border-[#E5DFD0] rounded p-6 mb-10 grid sm:grid-cols-3 gap-4">
+      <form onSubmit={handleAdd} className="bg-white text-black border border-[#E5DFD0] rounded p-6 mb-10 grid sm:grid-cols-3 gap-4">
         <input
           required
           value={name}
