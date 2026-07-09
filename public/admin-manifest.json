@@ -1,28 +1,39 @@
 {
-  "id": "/admin",
+  "id": "/",
   "name": "Cape Comorin School — Admin Panel",
   "short_name": "CCS Admin",
   "description": "Staff admin panel for Cape Comorin School — manage teachers, students, registers, notices, and fees.",
-  "start_url": "/admin",
-  "scope": "/admin",
+  "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait-primary",
   "background_color": "#FAF6EE",
   "theme_color": "#16233F",
   "lang": "en",
   "dir": "ltr",
   "categories": ["education", "productivity", "business"],
-  "launch_handler": { "client_mode": "focus-existing" },
   "prefer_related_applications": false,
   "icons": [
-    { "src": "/admin/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/admin/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/admin/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ],
-  "shortcuts": [
-    { "name": "Teachers", "url": "/admin/teachers", "icons": [{ "src": "/admin/icons/shortcut-teachers.png", "sizes": "96x96" }] },
-    { "name": "Students", "url": "/admin/students", "icons": [{ "src": "/admin/icons/shortcut-students.png", "sizes": "96x96" }] },
-    { "name": "Notices", "url": "/admin/notices", "icons": [{ "src": "/admin/icons/shortcut-notices.png", "sizes": "96x96" }] }
+    {
+      "src": "/admin/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/admin/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/admin/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
