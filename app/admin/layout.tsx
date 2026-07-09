@@ -15,18 +15,23 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const [user, setUser] = useState<User | null>(null);
   const [checking, setChecking] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setChecking(false);
-
       if (!firebaseUser && !isLoginPage) {
         router.replace("/login");
       }
     });
     return () => unsubscribe();
   }, [isLoginPage, router]);
+
+  // Close the mobile drawer automatically whenever the route changes
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   if (isLoginPage) {
     return <>{children}</>;
@@ -46,10 +51,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[#FAF6EE] flex">
-      <AdminSidebar />
+      <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col min-h-screen md:ml-64">
-        <AdminTopbar />
-        <main className="flex-1 px-6 py-8">{children}</main>
+        <AdminTopbar onMenuClick={() => setSidebarOpen(true)} />
+        <main className="flex-1 px-4 sm:px-6 py-8">{children}</main>
         <AdminFooter />
       </div>
     </div>

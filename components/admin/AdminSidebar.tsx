@@ -59,7 +59,13 @@ const icons: Record<string, ReactNode> = {
   ),
 };
 
-export default function AdminSidebar() {
+export default function AdminSidebar({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
   const [role, setRole] = useState<string | null>(null);
 
@@ -74,39 +80,60 @@ export default function AdminSidebar() {
   const visibleNav = nav.filter((item) => !item.superAdminOnly || role === "super_admin");
 
   return (
-    <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-[#16233F] text-[#FAF6EE]">
-      <div className="flex items-center gap-2 px-6 h-16 border-b border-[#2A3A5C]">
-        <div className="w-8 h-8 rounded-full overflow-hidden bg-transparent shrink-0">
-          <Image src="/logo.png" alt="Cape Comorin School" width={32} height={32} className="w-full h-full object-contain" />
+    <>
+      {open && (
+        <div onClick={onClose} className="fixed inset-0 bg-black/40 z-40 md:hidden" />
+      )}
+
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64 bg-[#16233F] text-[#FAF6EE] flex flex-col
+          transform transition-transform duration-200 ease-in-out
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:flex md:flex-col
+        `}
+      >
+        <div className="flex items-center justify-between px-6 h-16 border-b border-[#2A3A5C]">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-transparent shrink-0">
+              <Image src="/logo.png" alt="Cape Comorin School" width={32} height={32} className="w-full h-full object-contain" />
+            </div>
+            <span className="font-[family-name:var(--font-display)] font-semibold text-sm">
+              Admin Panel
+            </span>
+          </div>
+          <button onClick={onClose} className="md:hidden text-[#C9C4B8] hover:text-[#FAF6EE]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
-        <span className="font-[family-name:var(--font-display)] font-semibold text-sm">
-          Admin Panel
-        </span>
-      </div>
 
-      <nav className="flex-1 px-3 py-6 space-y-1">
-        {visibleNav.map((item) => {
-          const active = pathname?.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-colors ${
-                active
-                  ? "bg-[#C9A227] text-[#16233F] font-medium"
-                  : "text-[#C9C4B8] hover:bg-[#1F3055] hover:text-[#FAF6EE]"
-              }`}
-            >
-              {icons[item.icon]}
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+          {visibleNav.map((item) => {
+            const active = pathname?.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-colors ${
+                  active
+                    ? "bg-[#C9A227] text-[#16233F] font-medium"
+                    : "text-[#C9C4B8] hover:bg-[#1F3055] hover:text-[#FAF6EE]"
+                }`}
+              >
+                {icons[item.icon]}
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
 
-      <div className="px-6 py-4 border-t border-[#2A3A5C] text-xs text-[#8A93A8]">
-        Cape Comorin School
-      </div>
-    </aside>
+        <div className="px-6 py-4 border-t border-[#2A3A5C] text-xs text-[#8A93A8]">
+          Cape Comorin School
+        </div>
+      </aside>
+    </>
   );
 }
