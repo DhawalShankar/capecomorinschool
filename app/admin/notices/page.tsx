@@ -1,14 +1,12 @@
-// app/(admin)/notices/page.tsx
+// app/admin/notices/page.tsx
 "use client";
 import { useEffect, useState } from "react";
-
 type Notice = {
   id: number;
   title: string;
   file_url: string;
   uploaded_at: string;
 };
-
 export default function AdminNotices() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
@@ -16,35 +14,28 @@ export default function AdminNotices() {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
-
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   async function loadNotices() {
     setLoading(true);
     const res = await fetch(`${API}/api/notices`, { cache: "no-store" });
     setNotices(await res.json());
     setLoading(false);
   }
-
   useEffect(() => {
     loadNotices();
   }, []);
-
-  async function handleUpload(e: React.FormEvent) {
+  async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!file || !title) return;
     setUploading(true);
     setError("");
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("file", file);
-
     const res = await fetch(`${API}/api/notices`, {
       method: "POST",
       body: formData,
     });
-
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       setError(data.error || "Upload failed");
@@ -55,20 +46,17 @@ export default function AdminNotices() {
     }
     setUploading(false);
   }
-
   async function handleDelete(id: number) {
     if (!confirm("Delete this notice?")) return;
     await fetch(`${API}/api/notices/${id}`, { method: "DELETE" });
     loadNotices();
   }
-
   return (
     <div className="max-w-3xl">
       <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-3">Admin Panel</div>
       <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[#16233F] mb-8">
         Notice Board
       </h1>
-
       <form onSubmit={handleUpload} className="bg-white text-black border border-[#E5DFD0] rounded p-6 mb-10 space-y-4">
         <input
           required
@@ -94,7 +82,6 @@ export default function AdminNotices() {
         </button>
         {error && <p className="text-sm text-red-600">{error}</p>}
       </form>
-
       {loading ? (
         <p className="text-sm text-[#8A8F97]">Loading...</p>
       ) : (
@@ -102,7 +89,12 @@ export default function AdminNotices() {
           {notices.map((n) => (
             <div key={n.id} className="flex items-center justify-between bg-white border border-[#E5DFD0] rounded p-4">
               <div>
-                <a href={n.file_url} target="_blank" rel="noopener noreferrer" className="font-medium text-[#16233F] text-sm hover:underline">
+                <a
+                  href={`${API}/api/notices/${n.id}/download`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-[#16233F] text-sm hover:underline"
+                >
                   {n.title}
                 </a>
                 <div className="text-xs text-[#5B5F66] mt-1">{new Date(n.uploaded_at).toLocaleDateString()}</div>
