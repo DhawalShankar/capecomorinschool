@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { authedFetch } from "@/lib/api";
+import InstallAppButton from "./InstallAppButton";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: "dashboard", superAdminOnly: false },
@@ -129,6 +130,10 @@ export default function AdminSidebar({
             );
           })}
         </nav>
+
+        <div className="px-3 pb-2">
+          <InstallAppButton />
+        </div>
 
         <div className="px-6 py-4 border-t border-[#2A3A5C] text-xs text-[#8A93A8]">
           Cape Comorin School
