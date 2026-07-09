@@ -18,6 +18,14 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/admin-sw.js", { scope: "/admin" })
+        .catch((err) => console.error("SW registration failed:", err));
+    }
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setChecking(false);
