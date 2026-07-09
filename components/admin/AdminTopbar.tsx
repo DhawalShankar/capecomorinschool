@@ -1,15 +1,93 @@
 // components/admin/AdminTopbar.tsx
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "@/lib/auth";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { authedFetch } from "@/lib/api";
 import ChangePasswordModal from "./ChangePasswordModal";
+
+type AdminProfile = {
+  email: string;
+  role: "super_admin" | string;
+  teacher_id?: string | null;
+  first_name?: string | null;
+};
+
+const TITLES = ["Mr.", "Mrs.", "Ms.", "Dr."];
+
+/** Strips a leading title ("Mrs. Jane Smith" -> "Jane") and returns just the first name. */
+function firstNameFromTeacherName(fullName: string): string {
+  const withoutTitle = TITLES.reduce(
+    (acc, t) => (acc.startsWith(`${t} `) ? acc.slice(t.length + 1) : acc),
+    fullName
+  );
+  return withoutTitle.split(" ")[0] ?? withoutTitle;
+}
+
+/**
+ * Fallback only: derives a readable first name from the email's local part
+ * (e.g. "jane.smith@school.com" -> "Jane"). Used if the teacher record can't
+ * be loaded for some reason.
+ */
+function nameFromEmail(email: string): string {
+  const local = email.split("@")[0] ?? "";
+  const first = local.split(/[._-]/)[0] ?? local;
+  return first.charAt(0).toUpperCase() + first.slice(1);
+}
 
 export default function AdminTopbar({ onMenuClick }: { onMenuClick: () => void }) {
   const router = useRouter();
   const [signingOut, setSigningOut] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [profile, setProfile] = useState<AdminProfile | null>(null);
+  const [teacherFirstName, setTeacherFirstName] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    async function loadProfile() {
+      try {
+        const res = await authedFetch(`${API}/api/auth/me`);
+        if (!res.ok) return;
+        const data: AdminProfile = await res.json();
+        if (cancelled) return;
+        setProfile(data);
+
+        // Super admins have no teacher_id, so there's nothing to look up.
+        if (data.role !== "super_admin" && data.teacher_id) {
+          loadTeacherName(data.teacher_id);
+        }
+      } catch {
+        // Silently fall back to the generic greeting below.
+      }
+    }
+
+    async function loadTeacherName(teacherId: string) {
+      try {
+        const res = await authedFetch(`${API}/api/teachers/${teacherId}`);
+        if (!res.ok) return;
+        const teacher = await res.json();
+        if (!cancelled && teacher?.name) {
+          setTeacherFirstName(firstNameFromTeacherName(teacher.name));
+        }
+      } catch {
+        // Falls back to email-derived name below.
+      }
+    }
+
+    loadProfile();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const greeting = profile
+    ? profile.role === "super_admin"
+      ? "Welcome CCS"
+      : `Welcome ${teacherFirstName ?? profile.first_name ?? nameFromEmail(profile.email)}`
+    : "Welcome back";
 
   async function handleLogout() {
     setSigningOut(true);
@@ -31,7 +109,7 @@ export default function AdminTopbar({ onMenuClick }: { onMenuClick: () => void }
             </svg>
           </button>
           <div className="text-[#16233F] font-[family-name:var(--font-display)] font-semibold text-sm sm:text-base">
-            Welcome back
+            {greeting}
           </div>
         </div>
 
