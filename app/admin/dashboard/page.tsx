@@ -1,4 +1,6 @@
-// app/(admin)/dashboard/page.tsx
+// app/admin/dashboard/page.tsx
+"use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 function StatBadge({ children }: { children: React.ReactNode }) {
@@ -34,13 +36,42 @@ const icons = {
 } as const;
 
 const quickLinks = [
-  { href: "/admin/teachers", label: "Manage Teachers", desc: "Add, edit, or remove faculty listed on the public site." },
-  { href: "/admin/notices", label: "Post a Notice", desc: "Upload a PDF or DOCX and publish it to the Notice Board." },
-  { href: "/admin/calendar", label: "Update Calendar", desc: "Add school-specific events, exams, or PTM dates." },
-  { href: "/admin/registers", label: "Upload Register", desc: "Upload scanned registers for AI-assisted extraction." },
+  { href: "/teachers", label: "Manage Teachers", desc: "Add, edit, or remove faculty listed on the public site." },
+  { href: "/notices", label: "Post a Notice", desc: "Upload a PDF or DOCX and publish it to the Notice Board." },
+  { href: "/calendar", label: "Update Calendar", desc: "Add school-specific events, exams, or PTM dates." },
+  { href: "/registers", label: "Upload Register", desc: "Upload scanned registers for AI-assisted extraction." },
 ] as const;
 
 export default function AdminDashboard() {
+  const [teacherCount, setTeacherCount] = useState<number | null>(null);
+  const [noticeCount, setNoticeCount] = useState<number | null>(null);
+  const [upcomingCount, setUpcomingCount] = useState<number | null>(null);
+
+  const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  useEffect(() => {
+    fetch(`${API}/api/teachers`, { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => setTeacherCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => setTeacherCount(0));
+
+    fetch(`${API}/api/notices`, { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => setNoticeCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => setNoticeCount(0));
+
+    fetch(`${API}/api/calendar`, { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!Array.isArray(data)) return setUpcomingCount(0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const upcoming = data.filter((e: any) => new Date(e.start_date) >= today);
+        setUpcomingCount(upcoming.length);
+      })
+      .catch(() => setUpcomingCount(0));
+  }, [API]);
+
   return (
     <div className="max-w-5xl">
       <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-3">Admin Panel</div>
@@ -51,26 +82,31 @@ export default function AdminDashboard() {
         A quick look at what's happening across the site.
       </p>
 
-      {/* Stat cards — wire these to real counts once the backend routes are live */}
       <div className="grid sm:grid-cols-3 gap-6 mb-12">
         <div className="bg-white border border-[#E5DFD0] rounded p-5 flex gap-4">
           <StatBadge>{icons.teacher}</StatBadge>
           <div>
-            <div className="text-2xl font-semibold text-[#16233F]">—</div>
+            <div className="text-2xl font-semibold text-[#16233F]">
+              {teacherCount === null ? "—" : teacherCount}
+            </div>
             <div className="text-xs text-[#5B5F66]">Teachers Listed</div>
           </div>
         </div>
         <div className="bg-white border border-[#E5DFD0] rounded p-5 flex gap-4">
           <StatBadge>{icons.notice}</StatBadge>
           <div>
-            <div className="text-2xl font-semibold text-[#16233F]">—</div>
+            <div className="text-2xl font-semibold text-[#16233F]">
+              {noticeCount === null ? "—" : noticeCount}
+            </div>
             <div className="text-xs text-[#5B5F66]">Published Notices</div>
           </div>
         </div>
         <div className="bg-white border border-[#E5DFD0] rounded p-5 flex gap-4">
           <StatBadge>{icons.calendar}</StatBadge>
           <div>
-            <div className="text-2xl font-semibold text-[#16233F]">—</div>
+            <div className="text-2xl font-semibold text-[#16233F]">
+              {upcomingCount === null ? "—" : upcomingCount}
+            </div>
             <div className="text-xs text-[#5B5F66]">Upcoming Events</div>
           </div>
         </div>
