@@ -49,9 +49,11 @@ export default function AdminFooter() {
       : "Vritukul: Checking...";
 
   return (
-    <footer className="px-6 py-4 border-t border-[#E5DFD0] flex items-center justify-between text-xs text-[#8A8F97]">
-      <span>© {new Date().getFullYear()} Cape Comorin School — Admin Panel. Internal use only.</span>
-      <span className="flex items-center gap-1.5" title={label}>
+    <footer className="px-4 sm:px-6 py-4 border-t border-[#E5DFD0] flex flex-col sm:flex-row items-center sm:justify-between gap-2 text-xs text-[#8A8F97] text-center sm:text-left">
+      <span className="truncate max-w-full">
+        © {new Date().getFullYear()} Cape Comorin School — Admin Panel. Internal use only.
+      </span>
+      <span className="flex items-center gap-1.5 shrink-0" title={label}>
         <span className={`w-2 h-2 rounded-full ${dotColor}`} />
         {label}
       </span>

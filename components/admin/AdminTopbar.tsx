@@ -101,19 +101,19 @@ export default function AdminTopbar({ onMenuClick }: { onMenuClick: () => void }
 
   return (
     <>
-      <header className="h-16 bg-white border-b border-[#E5DFD0] flex items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center gap-3">
-          <button onClick={onMenuClick} className="md:hidden text-[#16233F]">
+      <header className="h-16 bg-white border-b border-[#E5DFD0] flex items-center justify-between px-4 sm:px-6 overflow-hidden">
+        <div className="flex items-center gap-3 min-w-0">
+          <button onClick={onMenuClick} className="md:hidden text-[#16233F] shrink-0">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" />
             </svg>
           </button>
-          <div className="text-[#16233F] font-[family-name:var(--font-display)] font-semibold text-sm sm:text-base">
+          <div className="text-[#16233F] font-[family-name:var(--font-display)] font-semibold text-sm sm:text-base truncate">
             {greeting}
           </div>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-5">
+        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
           <button
             onClick={() => setShowPasswordModal(true)}
             className="text-xs sm:text-sm text-[#5B5F66] hover:text-[#16233F] font-medium whitespace-nowrap"
