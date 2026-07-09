@@ -3,17 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { authedFetch } from "@/lib/api";
 
-// components/admin/AdminSidebar.tsx — only the `nav` array changes
 const nav = [
-  { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
-  { href: "/teachers", label: "Teachers", icon: "teacher" },
-  { href: "/students", label: "Students", icon: "student" },
-  { href: "/registers", label: "Registers", icon: "register" },
-  { href: "/notices", label: "Notices", icon: "notice" },
-  { href: "/calendar", label: "Calendar", icon: "calendar" },
-  { href: "/fees", label: "Fees", icon: "fees" },
+  { href: "/dashboard", label: "Dashboard", icon: "dashboard", superAdminOnly: false },
+  { href: "/teachers", label: "Teachers", icon: "teacher", superAdminOnly: true },
+  { href: "/students", label: "Students", icon: "student", superAdminOnly: false },
+  { href: "/registers", label: "Registers", icon: "register", superAdminOnly: false },
+  { href: "/notices", label: "Notices", icon: "notice", superAdminOnly: false },
+  { href: "/calendar", label: "Calendar", icon: "calendar", superAdminOnly: false },
+  { href: "/fees", label: "Fees", icon: "fees", superAdminOnly: true },
 ] as const;
 
 const icons: Record<string, ReactNode> = {
@@ -60,6 +61,17 @@ const icons: Record<string, ReactNode> = {
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+    authedFetch(`${API}/api/auth/me`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setRole(data?.role ?? null))
+      .catch(() => setRole(null));
+  }, []);
+
+  const visibleNav = nav.filter((item) => !item.superAdminOnly || role === "super_admin");
 
   return (
     <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-[#16233F] text-[#FAF6EE]">
@@ -73,7 +85,7 @@ export default function AdminSidebar() {
       </div>
 
       <nav className="flex-1 px-3 py-6 space-y-1">
-        {nav.map((item) => {
+        {visibleNav.map((item) => {
           const active = pathname?.startsWith(item.href);
           return (
             <Link

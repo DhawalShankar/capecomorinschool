@@ -41,7 +41,7 @@ export default function AdminRegisters() {
         Register Upload
       </h1>
 
-      <form onSubmit={handleUpload} className="bg-white border border-[#E5DFD0] rounded p-6 space-y-4">
+      <form onSubmit={handleUpload} className="bg-white text-black border border-[#E5DFD0] rounded p-6 space-y-4">
         <input
           required
           type="file"

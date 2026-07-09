@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { authedFetch } from "@/lib/api";
 
 function StatBadge({ children }: { children: React.ReactNode }) {
   return (
@@ -36,13 +37,14 @@ const icons = {
 } as const;
 
 const quickLinks = [
-  { href: "/teachers", label: "Manage Teachers", desc: "Add, edit, or remove faculty listed on the public site." },
-  { href: "/notices", label: "Post a Notice", desc: "Upload a PDF or DOCX and publish it to the Notice Board." },
-  { href: "/calendar", label: "Update Calendar", desc: "Add school-specific events, exams, or PTM dates." },
-  { href: "/registers", label: "Upload Register", desc: "Upload scanned registers for AI-assisted extraction." },
+  { href: "/teachers", label: "Manage Teachers", desc: "Add, edit, or remove faculty listed on the public site.", superAdminOnly: true },
+  { href: "/notices", label: "Post a Notice", desc: "Upload a PDF or DOCX and publish it to the Notice Board.", superAdminOnly: false },
+  { href: "/calendar", label: "Update Calendar", desc: "Add school-specific events, exams, or PTM dates.", superAdminOnly: false },
+  { href: "/registers", label: "Upload Register", desc: "Upload scanned registers for AI-assisted extraction.", superAdminOnly: false },
 ] as const;
 
 export default function AdminDashboard() {
+  const [role, setRole] = useState<string | null>(null);
   const [teacherCount, setTeacherCount] = useState<number | null>(null);
   const [noticeCount, setNoticeCount] = useState<number | null>(null);
   const [upcomingCount, setUpcomingCount] = useState<number | null>(null);
@@ -50,18 +52,18 @@ export default function AdminDashboard() {
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
-    fetch(`${API}/api/teachers`, { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data) => setTeacherCount(Array.isArray(data) ? data.length : 0))
-      .catch(() => setTeacherCount(0));
+    authedFetch(`${API}/api/auth/me`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setRole(data?.role ?? null))
+      .catch(() => setRole(null));
 
-    fetch(`${API}/api/notices`, { cache: "no-store" })
-      .then((res) => res.json())
+    authedFetch(`${API}/api/notices`)
+      .then((res) => (res.ok ? res.json() : []))
       .then((data) => setNoticeCount(Array.isArray(data) ? data.length : 0))
       .catch(() => setNoticeCount(0));
 
-    fetch(`${API}/api/calendar`, { cache: "no-store" })
-      .then((res) => res.json())
+    authedFetch(`${API}/api/calendar`)
+      .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         if (!Array.isArray(data)) return setUpcomingCount(0);
         const today = new Date();
@@ -71,6 +73,18 @@ export default function AdminDashboard() {
       })
       .catch(() => setUpcomingCount(0));
   }, [API]);
+
+  // teacher count only fetched (and only makes sense) for super admins
+  useEffect(() => {
+    if (role !== "super_admin") return;
+    authedFetch(`${API}/api/teachers`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => setTeacherCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => setTeacherCount(0));
+  }, [role, API]);
+
+  const isSuperAdmin = role === "super_admin";
+  const visibleQuickLinks = quickLinks.filter((q) => !q.superAdminOnly || isSuperAdmin);
 
   return (
     <div className="max-w-5xl">
@@ -82,16 +96,18 @@ export default function AdminDashboard() {
         A quick look at what's happening across the site.
       </p>
 
-      <div className="grid sm:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white border border-[#E5DFD0] rounded p-5 flex gap-4">
-          <StatBadge>{icons.teacher}</StatBadge>
-          <div>
-            <div className="text-2xl font-semibold text-[#16233F]">
-              {teacherCount === null ? "—" : teacherCount}
+      <div className={`grid sm:grid-cols-${isSuperAdmin ? "3" : "2"} gap-6 mb-12`}>
+        {isSuperAdmin && (
+          <div className="bg-white border border-[#E5DFD0] rounded p-5 flex gap-4">
+            <StatBadge>{icons.teacher}</StatBadge>
+            <div>
+              <div className="text-2xl font-semibold text-[#16233F]">
+                {teacherCount === null ? "—" : teacherCount}
+              </div>
+              <div className="text-xs text-[#5B5F66]">Teachers Listed</div>
             </div>
-            <div className="text-xs text-[#5B5F66]">Teachers Listed</div>
           </div>
-        </div>
+        )}
         <div className="bg-white border border-[#E5DFD0] rounded p-5 flex gap-4">
           <StatBadge>{icons.notice}</StatBadge>
           <div>
@@ -116,7 +132,7 @@ export default function AdminDashboard() {
         Quick Actions
       </h2>
       <div className="grid sm:grid-cols-2 gap-4">
-        {quickLinks.map((q) => (
+        {visibleQuickLinks.map((q) => (
           <Link
             key={q.href}
             href={q.href}

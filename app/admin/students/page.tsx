@@ -38,7 +38,7 @@ export default function AdminStudents() {
         Student Records
       </h1>
 
-      <form onSubmit={handleSearch} className="flex gap-3 mb-8">
+      <form onSubmit={handleSearch} className="flex text-black gap-3 mb-8">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}

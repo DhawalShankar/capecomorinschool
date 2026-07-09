@@ -25,6 +25,7 @@ export default function AdminTeachers() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
+  const [title, setTitle] = useState("Mrs.");
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
@@ -68,11 +69,12 @@ export default function AdminTeachers() {
     e.preventDefault();
     setSaving(true);
     setFormError(null);
+    const fullName = `${title} ${name}`.trim();
     try {
       const res = await authedFetch(`${API}/api/teachers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, subject, grade_level: gradeLevel }),
+        body: JSON.stringify({ name: fullName, subject, grade_level: gradeLevel }),
       });
       const result = await res.json();
       if (!res.ok) {
@@ -82,7 +84,7 @@ export default function AdminTeachers() {
       setCredentials({
         login_email: result.login_email,
         temp_password: result.temp_password,
-        teacher_name: name,
+        teacher_name: fullName,
       });
       setName("");
       setSubject("");
@@ -137,13 +139,25 @@ export default function AdminTeachers() {
         onSubmit={handleAdd}
         className="bg-white text-black border border-[#E5DFD0] rounded p-6 mb-10 grid sm:grid-cols-3 gap-4"
       >
-        <input
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Full name"
-          className="border border-[#E5DFD0] rounded px-4 py-2 text-sm sm:col-span-3"
-        />
+        <div className="flex gap-2 sm:col-span-3">
+          <select
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border border-[#E5DFD0] rounded px-3 py-2 text-sm bg-white"
+          >
+            <option value="Mr.">Mr.</option>
+            <option value="Mrs.">Mrs.</option>
+            <option value="Ms.">Ms.</option>
+            <option value="Dr.">Dr.</option>
+          </select>
+          <input
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Full name (without title)"
+            className="flex-1 border border-[#E5DFD0] rounded px-4 py-2 text-sm"
+          />
+        </div>
         <input
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
@@ -323,6 +337,15 @@ function CredentialsModal({
   );
 }
 
+const TITLES = ["Mr.", "Mrs.", "Ms.", "Dr."];
+
+function splitTitle(fullName: string): { title: string; name: string } {
+  const match = TITLES.find((t) => fullName.startsWith(`${t} `));
+  return match
+    ? { title: match, name: fullName.slice(match.length + 1) }
+    : { title: "Mrs.", name: fullName };
+}
+
 function EditTeacherModal({
   teacher,
   onCancel,
@@ -332,7 +355,9 @@ function EditTeacherModal({
   onCancel: () => void;
   onSave: (updated: Partial<Teacher>) => void;
 }) {
-  const [name, setName] = useState(teacher.name);
+  const initial = splitTitle(teacher.name);
+  const [title, setTitle] = useState(initial.title);
+  const [name, setName] = useState(initial.name);
   const [subject, setSubject] = useState(teacher.subject || "");
   const [gradeLevel, setGradeLevel] = useState(teacher.grade_level || "");
   const [bio, setBio] = useState(teacher.bio || "");
@@ -345,12 +370,25 @@ function EditTeacherModal({
       </h2>
 
       <div className="space-y-3 mb-5">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Full name"
-          className="w-full border border-[#E5DFD0] rounded px-4 py-2 text-sm text-black"
-        />
+        <div className="flex gap-2">
+          <select
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border border-[#E5DFD0] rounded px-3 py-2 text-sm bg-white text-black"
+          >
+            {TITLES.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Full name (without title)"
+            className="flex-1 border border-[#E5DFD0] rounded px-4 py-2 text-sm text-black"
+          />
+        </div>
         <input
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
@@ -381,7 +419,12 @@ function EditTeacherModal({
         </button>
         <button
           onClick={() =>
-            onSave({ name, subject, grade_level: gradeLevel, bio })
+            onSave({
+              name: `${title} ${name}`.trim(),
+              subject,
+              grade_level: gradeLevel,
+              bio,
+            })
           }
           className="flex-1 bg-[#8B2E3F] hover:bg-[#732634] transition-colors text-white rounded px-4 py-2 text-sm font-medium"
         >
