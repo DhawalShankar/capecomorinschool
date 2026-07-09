@@ -1,3 +1,4 @@
+// components/admin/InstallAppButton.tsx
 "use client";
 import { useState } from "react";
 import { usePWAInstall } from "@/components/admin/hooks/usePWAInstall";
@@ -22,7 +23,7 @@ export default function InstallAppButton({
 
   const baseClasses =
     variant === "sidebar"
-      ? "flex items-center gap-2 w-full px-3 py-2 rounded text-sm font-medium text-[#16233F] hover:bg-[#F7F5EF] transition-colors"
+      ? "flex items-center gap-2 w-full px-3 py-2 rounded text-sm font-medium text-[#C9C4B8] hover:bg-[#1F3055] hover:text-[#FAF6EE] transition-colors"
       : "flex items-center gap-2 w-full px-3 py-2 text-sm text-[#16233F] hover:bg-[#F7F5EF] transition-colors";
 
   return (

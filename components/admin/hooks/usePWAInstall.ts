@@ -57,6 +57,7 @@ export function usePWAInstall() {
     return outcome;
   }, [deferredPrompt]);
 
+  console.log({ installed, deferredPrompt, ios });
   const canShow = !installed && (!!deferredPrompt || ios);
 
   return { canShow, installed, isIOS: ios, canPromptNatively: !!deferredPrompt, promptInstall };
