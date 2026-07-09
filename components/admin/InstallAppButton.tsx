@@ -22,10 +22,9 @@ export default function InstallAppButton({
   }
 
   const baseClasses =
-    variant === "sidebar"
-      ? "flex items-center gap-2 w-full px-3 py-2 rounded text-sm font-medium text-[#C9C4B8] hover:bg-[#1F3055] hover:text-[#FAF6EE] transition-colors"
-      : "flex items-center gap-2 w-full px-3 py-2 text-sm text-[#16233F] hover:bg-[#F7F5EF] transition-colors";
-
+  variant === "sidebar"
+    ? "flex items-center gap-2 w-full px-3 py-2 rounded text-sm font-medium text-[#C9C4B8] hover:bg-[#1F3055] hover:text-[#FAF6EE] transition-colors"
+    : "mx-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-[#E5DFD0] bg-white text-sm font-medium text-[#16233F] hover:border-[#C9A227] hover:bg-[#C9A227]/5 hover:text-[#8B2E3F] transition-colors shadow-sm";
   return (
     <>
       <button onClick={handleClick} className={baseClasses}>

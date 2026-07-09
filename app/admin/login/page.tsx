@@ -8,12 +8,13 @@ import { auth } from "@/lib/auth";
 import InstallAppButton from "@/components/admin/InstallAppButton";
 
 export default function AdminLogin() {
+
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -57,7 +58,7 @@ export default function AdminLogin() {
         </svg>
 
         <div className="relative z-10 flex flex-col items-center md:items-start max-w-xs mx-auto md:mx-0 md:ml-16">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-transparent shadow-sm mb-6">
+          <div className="w-26 h-26 rounded-full overflow-hidden bg-transparent shadow-sm mb-6">
             <Image
               src="/logo.png"
               alt="Cape Comorin School"
@@ -175,7 +176,7 @@ export default function AdminLogin() {
             </form>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-6 flex justify-center">
             <InstallAppButton variant="dropdown" />
           </div>
 
