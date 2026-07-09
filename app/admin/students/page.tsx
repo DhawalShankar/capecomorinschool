@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { authedFetch } from "@/lib/api";
 
 type Student = {
+  id: number;
   sr_number: number;
   student_name: string;
   father_name: string;
@@ -29,14 +30,21 @@ type StudentEditFields = {
   last_school: string;
 };
 
+type DedupePreview = {
+  status: string;
+  duplicate_groups_found: number;
+  records_removed: number;
+  removed: { id: number; sr_number: number; school_id: string; student_name: string; kept_id: number }[];
+};
+
 const EDIT_FIELDS: { key: keyof StudentEditFields; label: string; type?: string }[] = [
   { key: "student_name", label: "Student Name" },
   { key: "father_name", label: "Father's Name" },
   { key: "mother_name", label: "Mother's Name" },
   { key: "father_address", label: "Father's Address" },
-  { key: "dob", label: "Date of Birth", type: "date" },
+  { key: "dob", label: "Date of Birth (DD-MM-YYYY)" },
   { key: "joining_class", label: "Joining Class" },
-  { key: "joining_date", label: "Joining Date", type: "date" },
+  { key: "joining_date", label: "Joining Date (DD-MM-YYYY)" },
   { key: "last_school", label: "Last School" },
 ];
 
@@ -50,6 +58,14 @@ export default function AdminStudents() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const [dedupePreview, setDedupePreview] = useState<DedupePreview | null>(null);
+  const [dedupeLoading, setDedupeLoading] = useState(false);
+  const [dedupeError, setDedupeError] = useState<string | null>(null);
+
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   async function loadAllStudents() {
@@ -57,6 +73,7 @@ export default function AdminStudents() {
     const res = await authedFetch(`${API}/api/students/list`);
     const data = await res.json();
     setResults(data.results || []);
+    setSelected(new Set());
     setLoading(false);
   }
 
@@ -79,6 +96,7 @@ export default function AdminStudents() {
     const res = await authedFetch(`${API}/api/students/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
     setResults(data.results || []);
+    setSelected(new Set());
     setLoading(false);
   }
 
@@ -123,8 +141,6 @@ export default function AdminStudents() {
         setSaving(false);
         return;
       }
-      // Merge saved fields into local results so the list reflects the edit
-      // without a full refetch.
       setResults((prev) =>
         prev.map((s) => (s.sr_number === sr_number ? { ...s, ...editForm } : s))
       );
@@ -137,6 +153,95 @@ export default function AdminStudents() {
     }
   }
 
+  function toggleSelected(id: number) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selected.size === results.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(results.map((s) => s.id)));
+    }
+  }
+
+  async function handleDeleteSelected() {
+    if (selected.size === 0) return;
+    const confirmed = window.confirm(
+      `Delete ${selected.size} student record${selected.size > 1 ? "s" : ""}? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const res = await authedFetch(`${API}/api/students/delete-bulk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: Array.from(selected) }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setDeleteError(data.error || "Failed to delete selected records.");
+        setDeleting(false);
+        return;
+      }
+      setResults((prev) => prev.filter((s) => !selected.has(s.id)));
+      setSelected(new Set());
+      setDeleting(false);
+    } catch (err) {
+      setDeleteError("Network error — please try again.");
+      setDeleting(false);
+    }
+  }
+
+  async function handleFindDuplicates() {
+    setDedupeLoading(true);
+    setDedupeError(null);
+    setDedupePreview(null);
+    try {
+      const res = await authedFetch(`${API}/api/students/dedupe?dry_run=true`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setDedupeError(data.error || "Failed to check for duplicates.");
+      } else {
+        setDedupePreview(data);
+      }
+    } catch (err) {
+      setDedupeError("Network error — please try again.");
+    }
+    setDedupeLoading(false);
+  }
+
+  async function handleConfirmDedupe() {
+    if (!dedupePreview) return;
+    const confirmed = window.confirm(
+      `Remove ${dedupePreview.records_removed} duplicate record${dedupePreview.records_removed > 1 ? "s" : ""} across ${dedupePreview.duplicate_groups_found} group(s)? The most complete record in each group is kept. This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setDedupeLoading(true);
+    setDedupeError(null);
+    try {
+      const res = await authedFetch(`${API}/api/students/dedupe?dry_run=false`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setDedupeError(data.error || "Failed to remove duplicates.");
+      } else {
+        setDedupePreview(null);
+        await loadAllStudents();
+      }
+    } catch (err) {
+      setDedupeError("Network error — please try again.");
+    }
+    setDedupeLoading(false);
+  }
+
   return (
     <div className="max-w-3xl">
       <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-3">Admin Panel</div>
@@ -144,7 +249,7 @@ export default function AdminStudents() {
         Student Records
       </h1>
 
-      <form onSubmit={handleSearch} className="flex text-black gap-3 mb-8">
+      <form onSubmit={handleSearch} className="flex text-black gap-3 mb-4">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -160,17 +265,99 @@ export default function AdminStudents() {
         </button>
       </form>
 
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 text-xs text-[#5B5F66]">
+            <input
+              type="checkbox"
+              checked={results.length > 0 && selected.size === results.length}
+              onChange={toggleSelectAll}
+            />
+            Select all
+          </label>
+          {selected.size > 0 && (
+            <button
+              onClick={handleDeleteSelected}
+              disabled={deleting}
+              className="text-xs font-medium text-white bg-[#8B2E3F] hover:bg-[#732634] disabled:opacity-60 transition-colors rounded px-4 py-1.5"
+            >
+              {deleting ? "Deleting..." : `Delete Selected (${selected.size})`}
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={handleFindDuplicates}
+          disabled={dedupeLoading}
+          className="text-xs font-medium text-[#16233F] border border-[#E5DFD0] hover:bg-[#F0EDE2] disabled:opacity-60 transition-colors rounded px-4 py-1.5"
+        >
+          {dedupeLoading ? "Checking..." : "Find Duplicates"}
+        </button>
+      </div>
+
+      {deleteError && <p className="text-sm text-red-600 mb-4">{deleteError}</p>}
+
+      {dedupeError && <p className="text-sm text-red-600 mb-4">{dedupeError}</p>}
+
+      {dedupePreview && (
+        <div className="mb-6 p-4 bg-[#FAF8F2] border border-[#E5DFD0] rounded text-sm">
+          {dedupePreview.duplicate_groups_found === 0 ? (
+            <p className="text-[#5B5F66]">No duplicate records found (matched by SR number + school).</p>
+          ) : (
+            <>
+              <p className="text-[#16233F] mb-2">
+                Found <strong>{dedupePreview.duplicate_groups_found}</strong> duplicate group(s), affecting{" "}
+                <strong>{dedupePreview.records_removed}</strong> record(s) that would be removed. The most
+                complete record in each group is kept automatically.
+              </p>
+              <ul className="text-xs text-[#5B5F66] mb-3 max-h-40 overflow-y-auto space-y-1">
+                {dedupePreview.removed.map((r) => (
+                  <li key={r.id}>
+                    SR {r.sr_number} &middot; {r.student_name || "(unnamed)"} &middot; record id {r.id} would be
+                    removed, keeping id {r.kept_id}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleConfirmDedupe}
+                  disabled={dedupeLoading}
+                  className="bg-[#8B2E3F] hover:bg-[#732634] disabled:opacity-60 transition-colors text-white px-5 py-2 rounded font-medium text-xs"
+                >
+                  {dedupeLoading ? "Removing..." : "Confirm & Remove Duplicates"}
+                </button>
+                <button
+                  onClick={() => setDedupePreview(null)}
+                  disabled={dedupeLoading}
+                  className="border border-[#E5DFD0] hover:bg-[#F0EDE2] disabled:opacity-60 transition-colors text-[#16233F] px-5 py-2 rounded font-medium text-xs"
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="divide-y divide-[#E5DFD0] border-t border-b border-[#E5DFD0]">
         {results.map((s) => {
           const isEditing = editingSr === s.sr_number;
           return (
             <div key={s.sr_number} className="py-3">
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="font-medium text-[#16233F] text-sm">{s.student_name}</div>
-                  <div className="text-xs text-[#5B5F66]">
-                    {s.digital_id} &middot; Father: {s.father_name || "—"} &middot; Class:{" "}
-                    {s.joining_class || "—"}
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={selected.has(s.id)}
+                    onChange={() => toggleSelected(s.id)}
+                  />
+                  <div>
+                    <div className="font-medium text-[#16233F] text-sm">{s.student_name}</div>
+                    <div className="text-xs text-[#5B5F66]">
+                      {s.digital_id} &middot; Father: {s.father_name || "—"} &middot; Class:{" "}
+                      {s.joining_class || "—"}
+                    </div>
                   </div>
                 </div>
                 {!isEditing && (
