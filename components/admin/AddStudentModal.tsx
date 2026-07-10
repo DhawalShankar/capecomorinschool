@@ -1,5 +1,6 @@
 "use client";
 import { useState, type FormEvent } from "react";
+import { authedFetch } from "@/lib/api";
 
 type Props = {
   onClose: () => void;
@@ -34,7 +35,7 @@ export default function AddStudentModal({ onClose, onCreated, API }: Props) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.student_name?.trim()) {
       setError("Student name is required.");
@@ -42,7 +43,7 @@ export default function AddStudentModal({ onClose, onCreated, API }: Props) {
     }
     setSaving(true);
     setError("");
-    const res = await fetch(`${API}/api/students/create`, {
+    const res = await authedFetch(`${API}/api/students/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, sr_series: srSeries }),
@@ -56,7 +57,6 @@ export default function AddStudentModal({ onClose, onCreated, API }: Props) {
     onCreated();
     onClose();
   }
-
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded p-6 w-full max-w-lg space-y-4 relative max-h-[90vh] overflow-y-auto">
