@@ -74,7 +74,7 @@ export default function ChangePasswordModal({ onClose }: { onClose: () => void }
             <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[#16233F] mb-6">
               Change Password
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className=" text-black space-y-4">
               <div>
                 <label className="block text-xs text-[#5B5F66] mb-1.5">Current Password</label>
                 <input
