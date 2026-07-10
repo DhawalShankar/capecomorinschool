@@ -55,12 +55,21 @@ export default function ChangePasswordModal({ onClose }: { onClose: () => void }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-6">
-      <div className="bg-white rounded-lg p-8 w-full max-w-sm">
-        {success ? (
-          <>
-            <p className="text-[#16233F] font-medium mb-6">
-              Password updated successfully.
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-6">
+    <div className="bg-white rounded-lg p-8 w-full max-w-sm relative">
+      {!success && (
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-4 right-4 text-[#5B5F66] hover:text-[#16233F] text-xl leading-none w-8 h-8 flex items-center justify-center rounded hover:bg-[#FAF6EE] transition-colors"
+        >
+          ×
+        </button>
+      )}
+      {success ? (
+        <>
+          <p className="text-[#16233F] font-medium mb-6">
+            Password updated successfully.
             </p>
             <button
               onClick={onClose}

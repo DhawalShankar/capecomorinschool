@@ -37,11 +37,8 @@ export default function GenerateNoticeModal({ onClose, onPublished, API }: Props
     setCalendarMatched(data.calendar_matched);
     setPrimaryEvent(data.primary_event);
     setNearbyEvents(data.nearby_events || []);
-
-    // Pre-fill from matched event, or leave blank for manual entry
     setEventTitle(data.primary_event?.title || "");
     setEventDate(data.primary_event?.date || "");
-
     setStep("fields");
   }
 
@@ -52,7 +49,7 @@ export default function GenerateNoticeModal({ onClose, onPublished, API }: Props
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        primary_event: primaryEvent, // null if unmatched — groq_client handles this
+        primary_event: primaryEvent,
         event_title: eventTitle,
         date: eventDate,
         timing,
@@ -81,10 +78,18 @@ export default function GenerateNoticeModal({ onClose, onPublished, API }: Props
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded p-6 w-full max-w-lg space-y-4">
+      <div className="bg-white rounded p-6 w-full max-w-lg space-y-4 relative">
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-4 right-4 text-[#5B5F66] hover:text-[#16233F] text-xl leading-none w-8 h-8 flex items-center justify-center rounded hover:bg-[#FAF6EE] transition-colors"
+        >
+          ×
+        </button>
+
         {step === "prompt" && (
           <>
-            <h2 className="font-semibold text-lg text-[#16233F]">Generate Notice</h2>
+            <h2 className="font-semibold text-lg text-[#16233F] pr-8">Generate Notice</h2>
             <input
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -107,7 +112,7 @@ export default function GenerateNoticeModal({ onClose, onPublished, API }: Props
 
         {step === "fields" && (
           <>
-            <h2 className="font-semibold text-lg text-[#16233F]">A few details</h2>
+            <h2 className="font-semibold text-lg text-[#16233F] pr-8">A few details</h2>
 
             {!calendarMatched && (
               <p className="text-xs bg-[#FFF7E6] border border-[#F0D48A] text-[#8A6D00] rounded px-3 py-2">
@@ -188,7 +193,7 @@ export default function GenerateNoticeModal({ onClose, onPublished, API }: Props
 
         {step === "draft" && (
           <>
-            <h2 className="font-semibold text-lg text-[#16233F]">Review & edit</h2>
+            <h2 className="font-semibold text-lg text-[#16233F] pr-8">Review & edit</h2>
             <textarea
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
