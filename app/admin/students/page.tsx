@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { authedFetch } from "@/lib/api";
+import AddStudentModal from "@/components/admin/AddStudentModal";
 
 type Student = {
   id: number;
@@ -66,6 +67,8 @@ export default function AdminStudents() {
   const [dedupeLoading, setDedupeLoading] = useState(false);
   const [dedupeError, setDedupeError] = useState<string | null>(null);
 
+  const [showAddModal, setShowAddModal] = useState(false);
+
   const [role, setRole] = useState<string | null>(null);
   const isSuperAdmin = role === "super_admin";
 
@@ -94,8 +97,6 @@ export default function AdminStudents() {
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
 
-    // Empty search box — just show everyone again instead of erroring
-    // on Vritukul's min_length=2 requirement.
     if (query.trim().length === 0) {
       loadAllStudents();
       return;
@@ -273,6 +274,13 @@ export default function AdminStudents() {
         >
           {loading ? "Searching..." : "Search"}
         </button>
+        <button
+          type="button"
+          onClick={() => setShowAddModal(true)}
+          className="bg-[#16233F] hover:bg-[#0f1830] transition-colors text-white px-6 py-2.5 rounded font-medium text-sm whitespace-nowrap"
+        >
+          + Add Student
+        </button>
       </form>
 
       {isSuperAdmin && (
@@ -429,6 +437,14 @@ export default function AdminStudents() {
           <p className="text-sm text-[#8A8F97] py-4">No students found.</p>
         )}
       </div>
+
+      {showAddModal && (
+        <AddStudentModal
+          API={API}
+          onClose={() => setShowAddModal(false)}
+          onCreated={loadAllStudents}
+        />
+      )}
     </div>
   );
 }
