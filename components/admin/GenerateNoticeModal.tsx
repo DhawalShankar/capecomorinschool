@@ -271,7 +271,7 @@ export default function GenerateNoticeModal({
               </div>
             )}
 
-            <details className="text-sm">
+            <details className="text-sm text-black">
               <summary className="cursor-pointer text-[#16233F] font-medium">
                 Everything detected from your prompt
               </summary>
