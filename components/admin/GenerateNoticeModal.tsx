@@ -73,9 +73,20 @@ export default function GenerateNoticeModal({
   const [fields, setFields] = useState<Fields>(EMPTY_FIELDS);
   const [nearbyEvents, setNearbyEvents] = useState<NearbyEvent[]>([]);
 
+  // Snapshot of which fields were missing when the draft came back from the
+  // server. This is fixed once per generation and never recomputed from live
+  // typing — otherwise a field would vanish from the "fill these in" list the
+  // moment its value became non-empty (i.e. after the very first keystroke),
+  // which yanks focus and reshuffles the remaining inputs mid-type.
+  const [originallyMissingKeys, setOriginallyMissingKeys] = useState<(keyof Fields)[]>([]);
+
   const [draftText, setDraftText] = useState("");
 
   function updateField(key: keyof Fields, value: string) {
+    // Note: we still track `missing` on the value itself (useful if this
+    // gets sent back to the server or read elsewhere), but nothing about
+    // which inputs are *visible* should depend on this — see
+    // originallyMissingKeys above.
     setFields((prev) => ({ ...prev, [key]: { value, missing: value.trim() === "" } }));
   }
 
@@ -99,10 +110,20 @@ export default function GenerateNoticeModal({
       if (!res.ok) throw new Error("Could not read the request. Try again.");
       const data: GenerateDraftResponse = await res.json();
 
+      const receivedFields = data.fields ?? EMPTY_FIELDS;
       setRawPrompt(data.raw_prompt ?? prompt);
       setPrimaryEvent(data.primary_event ?? null);
-      setFields(data.fields ?? EMPTY_FIELDS);
+      setFields(receivedFields);
       setNearbyEvents(data.nearby_events ?? []);
+
+      // Freeze the missing-fields list right here, from the server response,
+      // before any typing happens. This list will not change again for this
+      // generation cycle, no matter what the admin types afterward.
+      const missingNow = (Object.keys(receivedFields) as (keyof Fields)[]).filter(
+        (k) => receivedFields[k].missing && !ALWAYS_LOCKED.includes(k)
+      );
+      setOriginallyMissingKeys(missingNow);
+
       setStep("review");
     } catch (err: any) {
       setError(err.message || "Something went wrong");
@@ -169,9 +190,9 @@ export default function GenerateNoticeModal({
     }
   }
 
-  const missingFieldKeys = (Object.keys(fields) as (keyof Fields)[]).filter(
-    (k) => fields[k].missing && !ALWAYS_LOCKED.includes(k)
-  );
+  // Use the frozen snapshot, not a live recomputation from `fields` — see
+  // the comment on originallyMissingKeys above for why.
+  const missingFieldKeys = originallyMissingKeys;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -192,7 +213,7 @@ export default function GenerateNoticeModal({
         )}
 
         {step === "prompt" && (
-          <form onSubmit={handleGenerateFields} className="space-y-4">
+          <form onSubmit={handleGenerateFields} className="text-black space-y-4">
             <div>
               <label className="block text-sm font-medium text-[#16233F] mb-2">
                 Describe the notice
