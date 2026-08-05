@@ -1,6 +1,6 @@
-# Cape Comorin School — Frontend
+# Cape Comorin Children School — Frontend
 
-Frontend for Cape Comorin School's website (`capecomorinschool.com`) and admin panel (`admin.capecomorinschool.com`). One Next.js codebase, subdomain-routed.
+Frontend for Cape Comorin Children School's website (`capecomorinschool.com`) and admin panel (`admin.capecomorinschool.com`). One Next.js codebase, subdomain-routed.
 
 **Private repository — proprietary.** Not open source. Not licensed for reuse, forking, or redistribution outside this project.
 
@@ -135,7 +135,7 @@ Hosted on Vercel. `capecomorinschool.com` and `admin.capecomorinschool.com` poin
 
 ## Ownership
 
-Built and maintained for Cape Comorin School, Kanpur.
+Built and maintained for Cape Comorin Children School, Kanpur.
 📧 ccs.nurturedreams@gmail.com · 📞 +91 9839474191
 
 Engineering contact: project owner. Not externally maintained.

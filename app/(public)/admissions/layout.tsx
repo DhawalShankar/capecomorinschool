@@ -2,8 +2,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Admissions 2026–27 | Cape Comorin School, Kanpur",
-  description: "Admissions open for Playgroup to Class 8 at Cape Comorin School, Ratan Lal Nagar, Kanpur. Fill the enquiry form and our team will reach out.",
+  title: "Admissions 2026–27 | Cape Comorin Children School, Kanpur",
+  description: "Admissions open for Playgroup to Class 8 at Cape Comorin Children School, Ratan Lal Nagar, Kanpur. Fill the enquiry form and our team will reach out.",
 };
 
 export default function AdmissionsLayout({ children }: { children: React.ReactNode }) {

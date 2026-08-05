@@ -9,28 +9,28 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Cape Comorin School | Where the Dreams are Nurtured",
-    template: "%s | Cape Comorin School",
+    default: "Cape Comorin Children School | Where the Dreams are Nurtured",
+    template: "%s | Cape Comorin Children School",
   },
-  description: "Cape Comorin School, Kanpur — Playgroup to Class 8. Est. 2001. English-medium, government-recognized.",
+  description: "Cape Comorin Children School, Kanpur — Playgroup to Class 8. Est. 2001. English-medium, government-recognized.",
   keywords: [
-    "Cape Comorin School",
-    "Cape Comorin School Kanpur",
+    "Cape Comorin Children School",
+    "Cape Comorin Children School Kanpur",
     "school Ratan Lal Nagar",
     "Playgroup Kanpur",
     "English medium school Kanpur",
   ],
   openGraph: {
-    title: "Cape Comorin School | Where the Dreams are Nurtured",
+    title: "Cape Comorin Children School | Where the Dreams are Nurtured",
     description: "English-medium, government-recognized school for Playgroup to Class 8 in Ratan Lal Nagar, Kanpur.",
     url: "https://capecomorinschool.com",
-    siteName: "Cape Comorin School",
+    siteName: "Cape Comorin Children School",
     images: [
       {
         url: "https://capecomorinschool.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Cape Comorin School — Where the Dreams are Nurtured",
+        alt: "Cape Comorin Children School — Where the Dreams are Nurtured",
       },
     ],
     locale: "en_IN",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cape Comorin School | Where the Dreams are Nurtured",
+    title: "Cape Comorin Children School | Where the Dreams are Nurtured",
     description: "English-medium, government-recognized school for Playgroup to Class 8 in Ratan Lal Nagar, Kanpur.",
     images: ["https://capecomorinschool.com/og-image.png"],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 const schoolSchema = {
   "@context": "https://schema.org",
   "@type": "School",
-  name: "Cape Comorin School",
+  name: "Cape Comorin Children School",
   description: "English-medium, government-recognized school for Playgroup to Class 8 in Kanpur.",
   address: {
     "@type": "PostalAddress",

@@ -3,7 +3,7 @@ import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 // app/(public)/faculty/page.tsx
 export const metadata: Metadata = {
   title: "Faculty",
-  description: "Our teacher training philosophy at Cape Comorin School — character, ongoing training, and close classroom oversight, without publishing staff profiles.",
+  description: "Our teacher training philosophy at Cape Comorin Children School — character, ongoing training, and close classroom oversight, without publishing staff profiles.",
 };
 
 export default function Faculty() {

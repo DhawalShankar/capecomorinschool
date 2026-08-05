@@ -28,7 +28,7 @@ async function getNotices(): Promise<Notice[]> {
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "Cape Comorin School, Kanpur — English-medium, government-recognized school for Playgroup to Class 8. Admissions open for 2026–27.",
+  description: "Cape Comorin Children School, Kanpur — English-medium, government-recognized school for Playgroup to Class 8. Admissions open for 2026–27.",
 };
 
 export default async function Home() {
@@ -40,7 +40,7 @@ export default async function Home() {
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         <Image
           src="/hero-school.jpg"
-          alt="Cape Comorin School campus"
+          alt="Cape Comorin Children School campus"
           fill
           priority
           className="object-cover"
@@ -63,7 +63,7 @@ export default async function Home() {
             Where the Dreams are Nurtured
           </h1>
           <p className="mt-6 text-[#C9C4B8] max-w-lg text-lg">
-            Cape Comorin School has spent 25+ years building a place where
+            Cape Comorin Children School has spent 25+ years building a place where
             children are known by name, and education means real, honest
             effort — not certificates on a wall.
           </p>

@@ -6,11 +6,11 @@ import PWAInstallInit from "@/components/PWAInstallInit";
 
 export const metadata: Metadata = {
   title: {
-    default: "Cape Comorin School | Where the Dreams are Nurtured",
-    template: "%s | Cape Comorin School",
+    default: "Cape Comorin Children School | Where the Dreams are Nurtured",
+    template: "%s | Cape Comorin Children School",
   },
-  description: "Cape Comorin School, Kanpur — English-medium, government-recognized school for Playgroup to Class 8. Where the Dreams are Nurtured.",
-  keywords: ["Cape Comorin School", "Kanpur school", "Ratan Lal Nagar school", "Playgroup Kanpur", "English medium school Kanpur"],
+  description: "Cape Comorin Children School, Kanpur — English-medium, government-recognized school for Playgroup to Class 8. Where the Dreams are Nurtured.",
+  keywords: ["Cape Comorin Children School", "Kanpur school", "Ratan Lal Nagar school", "Playgroup Kanpur", "English medium school Kanpur"],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

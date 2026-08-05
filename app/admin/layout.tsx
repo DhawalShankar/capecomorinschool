@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import AdminLayoutClient from "./AdminLayoutClient";
 
 export const metadata: Metadata = {
-  title: "Admin Panel — Cape Comorin School",
+  title: "Admin Panel — Cape Comorin Children School",
   manifest: "/admin-manifest.json",
   appleWebApp: {
     capable: true,

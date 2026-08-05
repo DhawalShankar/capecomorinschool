@@ -77,7 +77,7 @@ export default function Admissions() {
             Admissions Open — 2026–27
           </h1>
           <p className="text-[#3A3E45] leading-relaxed max-w-2xl">
-            Cape Comorin School, Kanpur welcomes new admissions from Playgroup
+            Cape Comorin Children School, Kanpur welcomes new admissions from Playgroup
             through Class 8. Fill in the enquiry form below and our admissions
             team will get in touch with next steps.
           </p>
@@ -137,7 +137,7 @@ export default function Admissions() {
         <p className="text-[#3A3E45] leading-relaxed">
           The early years of school shape a child's confidence, discipline,
           and character for life — far beyond marks and report cards. At
-          Cape Comorin School, every enquiry is followed up personally by
+          Cape Comorin Children School, every enquiry is followed up personally by
           our admissions team, who will walk you through the process, answer
           your questions, and help you understand exactly how we nurture
           each child academically, emotionally, and socially — from
@@ -148,7 +148,7 @@ export default function Admissions() {
       {/* ---------- Why Parents Choose Us — now with icon badges ---------- */}
       <div className="mt-16 max-w-2xl">
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[#16233F] mb-6">
-          Why Parents Choose Cape Comorin School
+          Why Parents Choose Cape Comorin Children School
         </h2>
         <div className="grid sm:grid-cols-2 gap-6">
           {[

@@ -3,8 +3,8 @@ import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "About Us | Cape Comorin School, Kanpur",
-  description: "Cape Comorin School, established 2001 in Ratan Lal Nagar, Kanpur — an English-medium, government-recognized school for Playgroup to Class 8.",
+  title: "About Us | Cape Comorin Children School, Kanpur",
+  description: "Cape Comorin Children School, established 2001 in Ratan Lal Nagar, Kanpur — an English-medium, government-recognized school for Playgroup to Class 8.",
 };
 
 export default function About() {
@@ -15,7 +15,7 @@ export default function About() {
         Our Story
       </h1>
       <p className="text-[#3A3E45] leading-relaxed mb-6">
-        Cape Comorin School was founded in 2001 with a simple belief: that
+        Cape Comorin Children School was founded in 2001 with a simple belief: that
         every child deserves an education built on real effort, not
         shortcuts. For over 25 years, that belief has guided everything we
         do — from how we teach, to how we treat every single student who
@@ -58,7 +58,7 @@ export default function About() {
             <div className="w-70 h-70 rounded-full overflow-hidden border-4 border-[#C9A227] shadow-sm">
               <Image
                 src="/principal.png"
-                alt="Chitranshi Shukla, Principal of Cape Comorin School"
+                alt="Chitranshi Shukla, Principal of Cape Comorin Children School"
                 width={112}
                 height={112}
                 className="w-full h-full object-cover"

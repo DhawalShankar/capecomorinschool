@@ -49,9 +49,9 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <img src="/logo.png" alt="Cape Comorin School" className="h-10 w-10 object-contain" />
+            <img src="/logo.png" alt="Cape Comorin Children School" className="h-10 w-10 object-contain" />
             <div className="font-[family-name:var(--font-display)] text-xl font-semibold">
-              Cape Comorin School
+              Cape Comorin Children School
             </div>
           </div>
           <p className="text-sm text-[#C9C4B8] leading-relaxed">
@@ -59,16 +59,16 @@ export default function Footer() {
           </p>
 
           <div className="flex items-center gap-3 mt-5">
-            <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Cape Comorin School on Facebook" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
+            <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Cape Comorin Children School on Facebook" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
               <FacebookIcon size={18} />
             </a>
-            <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Cape Comorin School on Instagram" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
+            <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Cape Comorin Children School on Instagram" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
               <InstagramIcon size={18} />
             </a>
-            <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Cape Comorin School on LinkedIn" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
+            <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Cape Comorin Children School on LinkedIn" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
               <LinkedinIcon size={18} />
             </a>
-            <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Chat with Cape Comorin School on WhatsApp" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
+            <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Chat with Cape Comorin Children School on WhatsApp" className="text-[#C9C4B8] hover:text-[#C9A227] transition-colors">
               <WhatsAppIcon size={18} />
             </a>
           </div>
@@ -91,7 +91,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-[#2A3A5C] text-center text-xs text-[#8A93A8] py-4">
-        © {new Date().getFullYear()} Cape Comorin School. All rights reserved.
+        © {new Date().getFullYear()} Cape Comorin Children School. All rights reserved.
       </div>
     </footer>
   );

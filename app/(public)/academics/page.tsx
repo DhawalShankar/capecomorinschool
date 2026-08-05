@@ -76,7 +76,7 @@ const icons = {
   ),
 };
 export const metadata: Metadata = {
-  title: "Academics | Cape Comorin School, Kanpur",
+  title: "Academics | Cape Comorin Children School, Kanpur",
   description: "CBSE-pattern teaching built on NCERT foundations, from Playgroup to Class 8. Real understanding over rote memorization.",
 };
 export default function Academics() {
@@ -204,7 +204,7 @@ export default function Academics() {
           through a syllabus.
         </p>
         <p className="text-xs text-[#8A8F98] leading-relaxed">
-          Cape Comorin School stands as a government-recognized, English-medium
+          Cape Comorin Children School stands as a government-recognized, English-medium
           institution, proudly affiliated within the academic fold of the
           state of Uttar Pradesh's board of education — a foundation upon
           which our CBSE-style pedagogy is layered.
@@ -222,7 +222,7 @@ export default function Academics() {
         <div>
           <div className="text-[#C9A227] uppercase tracking-[0.2em] text-xs mb-2">Alumni</div>
           <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[#16233F] mb-3">
-            Are You a Cape Comorin School Alumnus?
+            Are You a Cape Comorin Children School Alumnus?
           </h2>
           <p className="text-[#3A3E45] text-sm leading-relaxed mb-4">
             We're building an alumni record — a way for future students and

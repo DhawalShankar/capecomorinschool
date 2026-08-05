@@ -59,8 +59,8 @@ const icons = {
 } as const;
 
 export const metadata: Metadata = {
-  title: "Gallery | Cape Comorin School, Kanpur",
-  description: "A look at life at Cape Comorin School — classrooms, facilities, and everyday moments from Playgroup to Class 8.",
+  title: "Gallery | Cape Comorin Children School, Kanpur",
+  description: "A look at life at Cape Comorin Children School — classrooms, facilities, and everyday moments from Playgroup to Class 8.",
 };
 
 export default function Gallery() {

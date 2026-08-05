@@ -22,10 +22,10 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-[#16233F] text-[#FAF6EE] shadow-md">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <img src="/logo.png" alt="Cape Comorin School" className="h-15 w-15 object-contain" />
+          <img src="/logo.png" alt="Cape Comorin Children School" className="h-15 w-15 object-contain" />
           <div className="leading-tight">
             <div className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-wide">
-              Cape Comorin School
+              Cape Comorin Children School
             </div>
             <div className="text-[11px] uppercase tracking-[0.15em] text-[#C9A227]">
               Est. 2001

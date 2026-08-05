@@ -39,7 +39,7 @@ async function getEvents(): Promise<CalendarEvent[]> {
 
 export const metadata: Metadata = {
   title: "Academic Calendar",
-  description: "Academic calendar for Cape Comorin School, Kanpur — term dates, holidays, exams, and PTMs at a glance.",
+  description: "Academic calendar for Cape Comorin Children School, Kanpur — term dates, holidays, exams, and PTMs at a glance.",
 };
 
 export default async function AcademicCalendar() {

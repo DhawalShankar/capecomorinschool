@@ -5,20 +5,20 @@ import emailjs from "@emailjs/browser";
 
 const faqs = [
   {
-    q: "What classes does Cape Comorin School offer?",
-    a: "Cape Comorin School offers education from Playgroup through Class 8.",
+    q: "What classes does Cape Comorin Children School offer?",
+    a: "Cape Comorin Children School offers education from Playgroup through Class 8.",
   },
   {
-    q: "Is Cape Comorin School English medium?",
-    a: "Yes, all instruction at Cape Comorin School is in English, starting from Playgroup.",
+    q: "Is Cape Comorin Children School English medium?",
+    a: "Yes, all instruction at Cape Comorin Children School is in English, starting from Playgroup.",
   },
   {
-    q: "Where is Cape Comorin School located?",
-    a: "Cape Comorin School is located at HIG 295, Ratan Lal Nagar, Kanpur.",
+    q: "Where is Cape Comorin Children School located?",
+    a: "Cape Comorin Children School is located at HIG 295, Ratan Lal Nagar, Kanpur.",
   },
   {
-    q: "Is Cape Comorin School government recognized?",
-    a: "Yes, Cape Comorin School is a government-recognized institution.",
+    q: "Is Cape Comorin Children School government recognized?",
+    a: "Yes, Cape Comorin Children School is a government-recognized institution.",
   },
   {
     q: "How can I enquire about admissions?",
@@ -63,6 +63,20 @@ export default function Contact() {
             <p>📍 HIG 295, Ratan Lal Nagar, Kanpur</p>
             <p>📞 +91 98394 74191</p>
             <p>✉️ ccs.nurturedreams@gmail.com</p>
+          </div>
+
+          {/* ---------- Google Map ---------- */}
+          <div className="mt-8 rounded overflow-hidden border border-[#E5DFD0]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3572.2219284275034!2d80.28389787520759!3d26.448574376926867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c47352c711edd%3A0x455051797437b043!2sCape%20Comorin%20Children%20School!5e0!3m2!1sen!2sus!4v1785910279900!5m2!1sen!2sus"
+              width="100%"
+              height="280"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Cape Comorin Children School location"
+            />
           </div>
         </div>
         <div className="bg-white border border-[#E5DFD0] rounded p-8">
